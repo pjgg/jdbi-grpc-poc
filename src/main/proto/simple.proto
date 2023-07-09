@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "grpc.jdbi.example.stub";
+option java_outer_classname = "ExampleApi";
+option objc_class_prefix = "Simple";
+
+package grpc.jdbi.example.stub;
+
+service SimpleGrpcResource {
+  rpc addOrangeToBasket(Orange) returns (Result) {}
+  rpc addAppleToBasket(Apple) returns (Result) {}
+  rpc fetchOranges(Empty) returns (OrangeCollection) {}
+}
+
+message Empty {}
+
+message OrangeCollection {
+  repeated Orange oranges = 1;
+}
+
+message Orange {
+  string color = 1;
+  int32  weight = 2;
+}
+
+message Apple {
+  string color = 1;
+  int32  weight = 2;
+}
+
+message Result {
+  string id = 1;
+}
