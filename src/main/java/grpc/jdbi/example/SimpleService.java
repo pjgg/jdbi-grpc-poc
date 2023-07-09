@@ -1,16 +1,10 @@
 package grpc.jdbi.example;
 
 import grpc.jdbi.example.jdbi.JdbiClient;
-import grpc.jdbi.example.stub.Apple;
-import grpc.jdbi.example.stub.Empty;
-import grpc.jdbi.example.stub.Orange;
-import grpc.jdbi.example.stub.OrangeCollection;
-import grpc.jdbi.example.stub.Result;
-import grpc.jdbi.example.stub.SimpleGrpcResourceGrpc;
+import grpc.jdbi.example.stub.*;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import org.jdbi.v3.core.Jdbi;
-import org.jdbi.v3.postgres.PostgresPlugin;
 
 import java.util.List;
 
@@ -58,6 +52,15 @@ public class SimpleService extends SimpleGrpcResourceGrpc.SimpleGrpcResourceImpl
             responseObserver.onNext(OrangeCollection.newBuilder().addAllOranges(oranges).build());
             responseObserver.onCompleted();
 
+        }catch(Exception e) {
+            responseObserver.onError(Status.INTERNAL.withDescription(e.getMessage()).asRuntimeException());
+        }
+    }
+
+    @Override
+    public void addAppleAndOrangeToBasket(Basket request, StreamObserver<Result> responseObserver) {
+        try {
+            simpleDAO.addBasket(request); // must fail in order to test the rollback
         }catch(Exception e) {
             responseObserver.onError(Status.INTERNAL.withDescription(e.getMessage()).asRuntimeException());
         }

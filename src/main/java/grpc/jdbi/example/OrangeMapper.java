@@ -18,7 +18,7 @@ public class OrangeMapper implements RowMapper<Orange> {
         }
 
         return Orange.newBuilder()
-                .setColor(rs.getNString("color"))
+                .setColor(rs.getString("color"))
                 .setWeight(rs.getInt("weight"))
                 .build();
     }

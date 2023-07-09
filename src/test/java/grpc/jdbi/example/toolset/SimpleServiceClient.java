@@ -1,5 +1,6 @@
 package grpc.jdbi.example.toolset;
 
+import grpc.jdbi.example.stub.Basket;
 import grpc.jdbi.example.stub.Empty;
 import grpc.jdbi.example.stub.Orange;
 import grpc.jdbi.example.stub.SimpleGrpcResourceGrpc;
@@ -25,5 +26,9 @@ public class SimpleServiceClient {
 
     public String addOrange(Orange orange)  {
         return simpleGrpcCli.addOrangeToBasket(orange).getId();
+    }
+
+    public void addBasket(Basket basket) {
+        simpleGrpcCli.addAppleAndOrangeToBasket(basket);
     }
 }

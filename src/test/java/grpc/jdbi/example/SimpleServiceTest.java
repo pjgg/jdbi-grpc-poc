@@ -3,14 +3,16 @@
  */
 package grpc.jdbi.example;
 
-import com.github.dockerjava.api.model.PortBinding;
 import grpc.jdbi.example.jdbi.HikariDataSourceStrategy;
 import grpc.jdbi.example.jdbi.JdbiClient;
 import grpc.jdbi.example.jdbi.JdbiDataSource;
+import grpc.jdbi.example.stub.Apple;
+import grpc.jdbi.example.stub.Basket;
 import grpc.jdbi.example.stub.Orange;
 import grpc.jdbi.example.toolset.SimpleServiceClient;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import io.grpc.StatusRuntimeException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -59,7 +61,19 @@ class SimpleServiceTest {
     public void singleTableTest() {
         SimpleServiceClient simpleCli = new SimpleServiceClient(PORT);
         String id = simpleCli.addOrange(Orange.newBuilder().setColor("orange").setWeight(50).build());
+        int amountOrange = simpleCli.getAllOranges().size();
         Assertions.assertNotNull(id);
+        Assertions.assertTrue(amountOrange == 1);
+    }
+
+    @Test
+    public void transactionTest() {
+        SimpleServiceClient simpleCli = new SimpleServiceClient(PORT);
+        Orange orange = Orange.newBuilder().setColor("orange").setWeight(500).build();
+        Apple apple = Apple.newBuilder().setColor("green").setWeight(40).build();
+        Assertions.assertThrows(StatusRuntimeException.class, () -> simpleCli.addBasket(Basket.newBuilder().setApple(apple).setOrange(orange).build()));
+        int amountOrange = simpleCli.getAllOranges().stream().filter(o -> o.getWeight() == 500).toList().size();
+        Assertions.assertTrue(amountOrange == 0);
     }
 
     private static JdbiClient defaultJdbiClient() {

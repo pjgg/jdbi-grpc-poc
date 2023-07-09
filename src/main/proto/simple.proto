@@ -10,6 +10,7 @@ package grpc.jdbi.example.stub;
 service SimpleGrpcResource {
   rpc addOrangeToBasket(Orange) returns (Result) {}
   rpc addAppleToBasket(Apple) returns (Result) {}
+  rpc addAppleAndOrangeToBasket(Basket) returns (Result) {}
   rpc fetchOranges(Empty) returns (OrangeCollection) {}
 }
 
@@ -17,6 +18,11 @@ message Empty {}
 
 message OrangeCollection {
   repeated Orange oranges = 1;
+}
+
+message Basket {
+    Orange orange = 1;
+    Apple apple = 2;
 }
 
 message Orange {
