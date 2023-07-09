@@ -31,4 +31,8 @@ public class SimpleServiceClient {
     public void addBasket(Basket basket) {
         simpleGrpcCli.addAppleAndOrangeToBasket(basket);
     }
+
+    public void addBasketManually(Basket basket) {
+        simpleGrpcCli.addAppleAndOrangeToBasketManually(basket);
+    }
 }

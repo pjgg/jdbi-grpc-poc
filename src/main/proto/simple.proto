@@ -11,6 +11,7 @@ service SimpleGrpcResource {
   rpc addOrangeToBasket(Orange) returns (Result) {}
   rpc addAppleToBasket(Apple) returns (Result) {}
   rpc addAppleAndOrangeToBasket(Basket) returns (Result) {}
+  rpc addAppleAndOrangeToBasketManually(Basket) returns (Result) {}
   rpc fetchOranges(Empty) returns (OrangeCollection) {}
 }
 

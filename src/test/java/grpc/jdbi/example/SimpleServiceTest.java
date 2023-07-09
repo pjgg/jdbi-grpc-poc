@@ -76,6 +76,16 @@ class SimpleServiceTest {
         Assertions.assertTrue(amountOrange == 0);
     }
 
+    @Test
+    public void transactionServiceTest() {
+        SimpleServiceClient simpleCli = new SimpleServiceClient(PORT);
+        Orange orange = Orange.newBuilder().setColor("orange").setWeight(505).build();
+        Apple apple = Apple.newBuilder().setColor("green").setWeight(40).build();
+        Assertions.assertThrows(StatusRuntimeException.class, () -> simpleCli.addBasketManually(Basket.newBuilder().setApple(apple).setOrange(orange).build()));
+        int amountOrange = simpleCli.getAllOranges().stream().filter(o -> o.getWeight() == 505).toList().size();
+        Assertions.assertTrue(amountOrange == 0);
+    }
+
     private static JdbiClient defaultJdbiClient() {
         JdbiDataSource dataSourceStrategy = new HikariDataSourceStrategy();
         return JdbiClient.getInstance(dataSourceStrategy);

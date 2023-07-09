@@ -65,4 +65,18 @@ public class SimpleService extends SimpleGrpcResourceGrpc.SimpleGrpcResourceImpl
             responseObserver.onError(Status.INTERNAL.withDescription(e.getMessage()).asRuntimeException());
         }
     }
+
+    @Override
+    public void addAppleAndOrangeToBasketManually(Basket request, StreamObserver<Result> responseObserver) {
+        try {
+            jdbi.inTransaction(transactionHandle ->{
+                SimpleDAO simpleDaoTx = transactionHandle.attach(SimpleDAO.class);
+                simpleDaoTx.insertOrange(request.getOrange().getColor(), request.getOrange().getWeight());
+                return simpleDaoTx.insertApple(request.getApple().getColor(), request.getApple().getWeight()); // must fail
+            });
+
+        }catch(Exception e) {
+            responseObserver.onError(Status.INTERNAL.withDescription(e.getMessage()).asRuntimeException());
+        }
+    }
 }
